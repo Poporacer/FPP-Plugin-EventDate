@@ -6,7 +6,7 @@ include_once 'functions.inc.php';
 include_once 'commonFunctions.inc.php';
 
 
-$pluginName = basename(dirname(__FILE__)); ;
+$pluginName = basename(dirname(__FILE__));
 include_once 'version.inc';
 
 $PLAYLIST_NAME="";
@@ -17,9 +17,9 @@ $eventExtension = ".fevt";
 
 //arg0 is  the program
 //arg1 is the first argument in the registration this will be --list
-//$DEBUG=true;
+$DEBUG=false;
 
-$SMSEventFile = $eventDirectory."/".$MAJOR."_".$MINOR.$eventExtension;
+$SMSEventFile = $eventDirectory . "/" . $MAJOR . "_" . $MINOR.$eventExtension;
 $SMSGETScriptFilename = $scriptDirectory."/".$pluginName."_GET.sh";
 
 $messageQueue_Plugin = "MessageQueue";
@@ -31,15 +31,12 @@ $MESSAGE_QUEUE_PLUGIN_ENABLED=false;
 
 $logFile = $settings['logDirectory']."/".$pluginName.".log";
 
+$messageQueuePluginPath = $settings['pluginDirectory'] . "/" . $messageQueue_Plugin."/";
+$messageQueueFile = urldecode(ReadSettingFromFile("MESSAGE_FILE", $messageQueue_Plugin));
 
-
-$messageQueuePluginPath = $settings['pluginDirectory']."/".$messageQueue_Plugin."/";
-
-$messageQueueFile = urldecode(ReadSettingFromFile("MESSAGE_FILE",$messageQueue_Plugin));
-
-if(file_exists($messageQueuePluginPath."functions.inc.php"))
+if(file_exists($messageQueuePluginPath . "functions.inc.php"))
 {
-	include $messageQueuePluginPath."functions.inc.php";
+	include $messageQueuePluginPath . "functions.inc.php";
 	$MESSAGE_QUEUE_PLUGIN_ENABLED=true;
 
 } else {
@@ -49,13 +46,13 @@ if(file_exists($messageQueuePluginPath."functions.inc.php"))
 }
 
 
-$gitURL = "https://github.com/LightsOnHudson/FPP-Plugin-EventDate.git";
+$gitURL = "https://github.com/FalconChristmas/FPP-Plugin-EventDate.git";
 
 
 $pluginUpdateFile = $settings['pluginDirectory']."/".$pluginName."/"."pluginUpdate.inc";
 
 
-logEntry("plugin update file: ".$pluginUpdateFile);
+logEntry("plugin update file: " . $pluginUpdateFile);
 
 
 if(isset($_POST['updatePlugin']))
@@ -77,14 +74,15 @@ if(isset($_POST['updatePlugin']))
 	
 	
 }
-$DEBUG = $pluginSettings['DEBUG'];
+if (isset($pluginSettings['DEBUG'])) {
+    $DEBUG = $pluginSettings['DEBUG'];
+}
 
 if(isset($_POST['submit']))
 {
 	if($DEBUG)
-	print_r($_POST);
+        print_r($_POST);
 	
-
 
 //	echo "Writring config fie <br/> \n";
 	WriteSettingToFile("MONTH",urlencode($_POST['MONTH']), $pluginName);
@@ -93,23 +91,22 @@ if(isset($_POST['submit']))
 	
 	WriteSettingToFile("MIN",urlencode($_POST['MIN']), $pluginName);
 	WriteSettingToFile("HOUR",urlencode($_POST['HOUR']), $pluginName);
-	WriteSettingToFile("HOUR_MODE",urlencode($_POST["HOUR_MODE"]),$pluginName);
-	WriteSettingToFile("PRE_TEXT",urlencode($_POST["PRE_TEXT"]),$pluginName);
-	WriteSettingToFile("POST_TEXT",urlencode($_POST["POST_TEXT"]),$pluginName);
-	WriteSettingToFile("EVENT_NAME",urlencode($_POST["EVENT_NAME"]),$pluginName);
+	WriteSettingToFile("HOUR_MODE",urlencode($_POST["HOUR_MODE"]), $pluginName);
+	WriteSettingToFile("PRE_TEXT",urlencode($_POST["PRE_TEXT"]), $pluginName);
+	WriteSettingToFile("POST_TEXT",urlencode($_POST["POST_TEXT"]), $pluginName);
+	WriteSettingToFile("EVENT_NAME",urlencode($_POST["EVENT_NAME"]), $pluginName);
 	
-	WriteSettingToFile("LAST_READ",urlencode($_POST["LAST_READ"]),$pluginName);
+	WriteSettingToFile("LAST_READ",urlencode($_POST["LAST_READ"]), $pluginName);
 	
-	WriteSettingToFile("MATRIX_LOCATION",urlencode($_POST["MATRIX_LOCATION"]),$pluginName);
+	WriteSettingToFile("MATRIX_LOCATION",urlencode($_POST["MATRIX_LOCATION"]), $pluginName);
 	
-    $pluginConfigFile = $settings['configDirectory'] . "/plugin." .$pluginName;
+    $pluginConfigFile = $settings['configDirectory'] . "/plugin." . $pluginName;
     if (file_exists($pluginConfigFile)) {
         $pluginSettings = parse_ini_file($pluginConfigFile);
     }
-	
 }
 
-//THIS IS O COOL!
+//THIS IS SO COOL!
 //set the variable names as necessary??? do we even need to do this???
 
 foreach ($pluginSettings as $key => $value) {
@@ -123,32 +120,43 @@ foreach ($pluginSettings as $key => $value) {
 
 }
 	
-if($PRE_TEXT == "") {
+if(!isset($PRE_TEXT) || $PRE_TEXT == "") {
 	$PRE_TEXT = "It is ";
 }
 
-if($POST_TEXT =="") {
+if(!isset($POST_TEXT) || $POST_TEXT =="") {
 	$POST_TEXT = " until ";
 }
 
-if($EVENT_NAME == "") {
+if(!isset($EVENT_NAME) || $EVENT_NAME == "") {
 	$EVENT_NAME = " THE EVENT!";
-	
 }
 
-	
-	if((int)$LAST_READ == 0 || $LAST_READ == "") {
+if(!isset($LAST_READ) || (int)$LAST_READ == 0 || $LAST_READ == "") {
 		$LAST_READ=0;
-	}
+}
+    if (!isset($YEAR)) {
+        $YEAR = 2019;
+    }
+    if (!isset($MONTH)) {
+        $MONTH = 12;
+    }
+    if (!isset($DAY)) {
+        $DAY = 25;
+    }
+    if (!isset($HOUR)) {
+        $HOUR = 0;
+    }
+    if (!isset($MIN)) {
+        $MIN = 0;
+    }
 
-	$Plugin_DBName = $settings['configDirectory']."/FPP.".$pluginName.".db";
+$Plugin_DBName = $messageQueueFile;
 	
-	//echo "PLUGIN DB:NAME: ".$Plugin_DBName;
+$db = new SQLite3($Plugin_DBName) or die('Unable to open database');
 	
-	$db = new SQLite3($Plugin_DBName) or die('Unable to open database');
-	
-	//create the default tables if they do not exist!
-	createTables();
+//create the default tables if they do not exist!
+createTables();
 ?>
 
 <html>
@@ -157,7 +165,7 @@ if($EVENT_NAME == "") {
 
 <div id="EventDate" class="settings">
 <fieldset>
-<legend><?php echo $pluginName." Version: ".$pluginVersion;?> Support Instructions</legend>
+<legend><?php echo $pluginName . " Version: ". $pluginVersion;?> Support Instructions</legend>
 
 <p>Known Issues:
 <ul>
@@ -193,7 +201,7 @@ $reboot=0;
 echo "ENABLE PLUGIN: ";
 
 
-PrintSettingCheckbox("Plugin: ".$pluginName." ", "ENABLED", $restart = 0, $reboot = 0, "ON", "OFF", $pluginName = $pluginName, $callbackName = "");
+PrintSettingCheckbox("Plugin: " . $pluginName . " ", "ENABLED", $restart = 0, $reboot = 0, "ON", "OFF", $pluginName = $pluginName, $callbackName = "");
 
 
 echo "<p/> \n";
@@ -204,10 +212,9 @@ echo "<input type=\"text\" value=\"".$PRE_TEXT."\" name=\"PRE_TEXT\"> \n";
 
 echo "<p/> \n";
 
-
 $strEventDate = $YEAR."-".$MONTH."-".$DAY." ".$HOUR.":".$MIN.":00";
 
-logEntry( "event date: ".$strEventDate);
+logEntry( "event date: " . $strEventDate);
 
 //$date1 = strtotime('2013-07-03 18:00:00');
 $date1 = strtotime($strEventDate);

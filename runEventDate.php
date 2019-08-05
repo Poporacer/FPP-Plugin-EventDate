@@ -58,7 +58,6 @@ if (file_exists($pluginConfigFile))
 	$DEBUG=urldecode($pluginSettings['DEBUG']);
 	
 
-
 //THIS IS O COOL!
 //set the variable names as necessary??? do we even need to do this???
 
