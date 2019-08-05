@@ -3,10 +3,13 @@
 error_reporting(0);
 //
 //Version 1 for release
-$pluginName ="EventDate";
+$pluginName = basename(dirname(__FILE__));
 $myPid = getmypid();
 
 $messageQueue_Plugin = "MessageQueue";
+if (strpos($pluginName, "FPP-Plugin") !== false) {
+    $messageQueue_Plugin = "FPP-Plugin-MessageQueue";
+}
 $MESSAGE_QUEUE_PLUGIN_ENABLED=false;
 
 
@@ -36,6 +39,9 @@ if(file_exists($messageQueuePluginPath."functions.inc.php"))
 
 
 $MATRIX_MESSAGE_PLUGIN_NAME = "MatrixMessage";
+if (strpos($pluginName, "FPP-Plugin") !== false) {
+    $messageQueue_Plugin = "FPP-Plugin-MatrixMessage";
+}
 //page name to run the matrix code to output to matrix (remote or local);
 $MATRIX_EXEC_PAGE_NAME = "matrix.php";
 
@@ -136,7 +142,7 @@ $messageText .= " ".$POST_TEXT. " ".$EVENT_NAME;
 
 $messageText = preg_replace('!\s+!', ' ', $messageText);
 
-logEntry("Adding message ".$messageText. " to message queue");
+logEntry("Adding message ".$messageText. " to message queue: " . $pluginName);
 if($MESSAGE_QUEUE_PLUGIN_ENABLED) {
 	addNewMessage($messageText,$pluginName,$EVENT_NAME);
 } else {

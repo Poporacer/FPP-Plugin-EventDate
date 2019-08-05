@@ -6,7 +6,7 @@ include_once 'functions.inc.php';
 include_once 'commonFunctions.inc.php';
 
 
-$pluginName = "EventDate";
+$pluginName = basename(dirname(__FILE__)); ;
 include_once 'version.inc';
 
 $PLAYLIST_NAME="";
@@ -23,6 +23,9 @@ $SMSEventFile = $eventDirectory."/".$MAJOR."_".$MINOR.$eventExtension;
 $SMSGETScriptFilename = $scriptDirectory."/".$pluginName."_GET.sh";
 
 $messageQueue_Plugin = "MessageQueue";
+if (strpos($pluginName, "FPP-Plugin") !== false) {
+    $messageQueue_Plugin = "FPP-Plugin-MessageQueue";
+}
 $MESSAGE_QUEUE_PLUGIN_ENABLED=false;
 
 
@@ -99,7 +102,10 @@ if(isset($_POST['submit']))
 	
 	WriteSettingToFile("MATRIX_LOCATION",urlencode($_POST["MATRIX_LOCATION"]),$pluginName);
 	
-	
+    $pluginConfigFile = $settings['configDirectory'] . "/plugin." .$pluginName;
+    if (file_exists($pluginConfigFile)) {
+        $pluginSettings = parse_ini_file($pluginConfigFile);
+    }
 	
 }
 
@@ -172,7 +178,7 @@ if($EVENT_NAME == "") {
 
 <p/>
 
-<form method="post" action="http://<? echo $_SERVER['SERVER_NAME']?>/plugin.php?plugin=<?echo $pluginName;?>&page=plugin_setup.php">
+<form method="post" action="/plugin.php?plugin=<?echo $pluginName;?>&page=plugin_setup.php">
 
 
 <?
