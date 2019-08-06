@@ -40,7 +40,7 @@ if(file_exists($messageQueuePluginPath."functions.inc.php"))
 
 $MATRIX_MESSAGE_PLUGIN_NAME = "MatrixMessage";
 if (strpos($pluginName, "FPP-Plugin") !== false) {
-    $messageQueue_Plugin = "FPP-Plugin-MatrixMessage";
+    $MATRIX_MESSAGE_PLUGIN_NAME = "FPP-Plugin-Matrix-Message";
 }
 //page name to run the matrix code to output to matrix (remote or local);
 $MATRIX_EXEC_PAGE_NAME = "matrix.php";
