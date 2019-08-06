@@ -151,7 +151,7 @@ if($MESSAGE_QUEUE_PLUGIN_ENABLED) {
 if($IMMEDIATE_OUTPUT != "ON") {
 	logEntry("NOT immediately outputting to matrix");
 } else {
-	logEntry ( "IMMEDIATE OUTPUT ENABLED" );
+	logEntry("IMMEDIATE OUTPUT ENABLED" );
 	
 	// write high water mark, so that if run-matrix is run it will not re-run old messages
 	

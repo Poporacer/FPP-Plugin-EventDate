@@ -91,7 +91,6 @@ if(isset($_POST['submit']))
 	
 	WriteSettingToFile("MIN",urlencode($_POST['MIN']), $pluginName);
 	WriteSettingToFile("HOUR",urlencode($_POST['HOUR']), $pluginName);
-	WriteSettingToFile("HOUR_MODE",urlencode($_POST["HOUR_MODE"]), $pluginName);
 	WriteSettingToFile("PRE_TEXT",urlencode($_POST["PRE_TEXT"]), $pluginName);
 	WriteSettingToFile("POST_TEXT",urlencode($_POST["POST_TEXT"]), $pluginName);
 	WriteSettingToFile("EVENT_NAME",urlencode($_POST["EVENT_NAME"]), $pluginName);
