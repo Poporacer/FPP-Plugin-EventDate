@@ -92,9 +92,13 @@ function printDaySelection($day, $dayName) {
 //print month selection
 function printYearSelection($year, $yearName) {
 	global $DEBUG;
-
-	$year_array = array("2016","2017","2018","2019","2020");
-
+	
+	$dateHolder = date("Y");
+	$year_array = array($dateHolder);
+	for ($x = 1; $x < 5; $x++) {
+		array_push($year_array, date("Y") + $x);
+	}
+	
 	echo "<select name=\"".$yearName."\"> \n";
 
 	foreach($year_array as $y) {
