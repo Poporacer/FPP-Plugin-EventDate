@@ -112,29 +112,48 @@ logEntry( "Difference between ".date('Y-m-d H:i:s',$date1)." and ".date('Y-m-d H
 //echo $m." minutes\n";
 
 $messageText = $PRE_TEXT;
-if ((int) $y >= 2){
-	$messageText .= $y. " years ";
+if ($y >= 1){
+	if ($y >=2){
+		$messageText .= intval($y). " years ";
+	} else {
+		$messageText .= intval($y). " year ";
+	}
 }
-if ((int) $d >= 2 ){
-	$messageText .= $d. " days ";
-}
-if ((int) $h >= 2 && $INCLUDE_HOURS == "ON"){
-	$messageText .= $h. " hours ";
-}
-if ((int) $m >= 2 && $INCLUDE_MINUTES == "ON"){
-	$messageText .= $m. " minutes ";
-}
-if ((int) $y == 1){
-	$messageText .= $y. " year ";
-}
-if ((int) $d ==1 ){
-	$messageText .= $d. " day ";
-}
-if ((int) $h == 1 && $INCLUDE_HOURS == "ON"){
-	$messageText .= $h. " hour ";
-}
-if ((int) $m == 1 && $INCLUDE_MINUTES == "ON"){
-	$messageText .= $m. " minute ";
+if ($d >= 1){
+	if ($d >=2){
+		$messageText .= intval($d). " days ";
+	} else {
+		$messageText .= intval($d). " day ";
+	}
+	if($INCLUDE_HOURS == "ON"){
+		if ($h >=2) {
+			$messageText .= intval($h). " hours ";
+		} else {
+			if ($h >= 1) {
+				$messageText .= intval($h). " hour ";
+			}
+		}
+	}
+	if($INCLUDE_MINUTES == "ON"){
+		if ($m >=2) {
+			$messageText .= intval($m). " minutes ";
+		} else {
+			$messageText .= intval($m). " minute ";
+		}	
+	}
+} else {
+	if ($h >=2) {
+		$messageText .= intval($h). " hours ";
+	} else {
+		if ($h >=1) {
+			$messageText .= intval($h). " hour ";
+		}
+	}
+	if ($m >=2) {
+		$messageText .= intval($m). " minutes ";
+	} else {
+		$messageText .= intval($m). " minute ";
+	}
 }
 
 $messageText .= " ".$POST_TEXT. " ".$EVENT_NAME;
