@@ -225,7 +225,7 @@ $subTime = $date1 - $date2;
 $y = ($subTime/(60*60*24*365));
 $d = ($subTime/(60*60*24))%365;
 $h = ($subTime/(60*60))%24;
-$m = ($subTime/60)%60;
+$m = ($subTime/60)%60 + 1;
 
 logEntry( "Difference between ".date('Y-m-d H:i:s',$date1)." and ".date('Y-m-d H:i:s',$date2)." is:".$y." years ".$d." days ".$h." hours ".$m." minutes");
 //echo $y." years\n";
